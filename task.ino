@@ -14,11 +14,11 @@ void dlay(float t)
 {
   TCCR0B = (1 << CS02) | (1 << CS00);
   k = 0;
-  while (k <= 10)
+  while (k <= 10)       // Some delay thing
     ;
   TCCR0B = 0;
 }
-void init()
+void init()             // Init fir timers and ADC
 {
   TIMSK0 = 1 << TOIE0;
   ADMUX = (1 << REFS0); /* Vref: Avcc, ADC channel: 0 */
@@ -28,7 +28,7 @@ void init()
 /*
   ADC Read function
 */
-uint16_t ADC_Read(unsigned char channel)
+uint16_t ADC_Read(unsigned char channel)   // Reads from the channel passed. Anhy analog pin
 {
   ADMUX = (1 << REFS0) | (channel & 0x07); /* set input channel to read */
   ADCSRA |= (1 << ADSC);                   /* Start ADC conversion */
@@ -78,15 +78,5 @@ int main()
     {
       Serial.print("RIGHT");
     }
-    /*
-    else if (z>=216 && z<=252 && y>=210 && y<=229) {
-      Serial.print(5);
-    }
-    else if (z>=216 && z<=252 && y<210) {
-      Serial.print(6);
-    }
-    else if (z>=216 && z<=252 && y>250) {
-      Serial.print(7);
-    }*/
   }
 }
