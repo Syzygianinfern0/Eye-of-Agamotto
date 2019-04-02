@@ -4,10 +4,8 @@
             "name": "Linux",
             "includePath": [
                 "/opt/arduino-1.8.8/tools/**",
-                "/opt/arduino-1.8.8/hardware/arduino/avr/**",
-                "/opt/arduino-1.8.8/**",
-                "/opt/arduino-1.8.8/hardware/tools/avr/avr/include/**"
-
+                "/opt/arduino-1.8.8/hardware/tools/avr/avr/include/**",
+                "/opt/arduino-1.8.8/hardware/arduino/avr/**"
             ],
             "forcedInclude": [
                 "/opt/arduino-1.8.8/hardware/arduino/avr/cores/arduino/Arduino.h"
