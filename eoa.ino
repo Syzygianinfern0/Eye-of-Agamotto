@@ -1,4 +1,3 @@
-#include <iom328p.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
 volatile int k = 0, brightness = 0;
