@@ -92,9 +92,30 @@ void disp_xy()
 
   // pos[0][h[0]] = 1;
   // pos[1][h[1]] = 1;
-  pos[h[0]][h[1]] = 1;
-  pos[food[0]][food[1]] = 1;
-  disp();
+  k0 = 0;
+
+  while(k0<=120)
+  {
+    for (int i = 0; i < 6; i++)
+    {
+      for (int j = 0; j < 6; j++)
+      {
+        pos[i][j] = 0;
+      }
+    }
+    pos[h[0]][h[1]] = 1;
+    disp();
+    for (int i = 0; i < 6; i++)
+    {
+      for (int j = 0; j < 6; j++)
+      {
+        pos[i][j] = 0;
+      }
+    }
+    pos[food[0]][food[1]] = 1;
+    disp();  
+  }
+  
 }
 void ran()
 {
@@ -137,7 +158,7 @@ int main()
     // usart_write("  direction : ");
     // usart_write((String)direction);
     // usart_write("\n");  
-    _delay_ms(3000);
+    // _delay_ms(3000);
    
     x = y = z = 0;
     while (game_status != 'r')
