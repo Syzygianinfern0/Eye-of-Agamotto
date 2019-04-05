@@ -19,7 +19,8 @@ void dlay(void)
 {
   TCCR2B = (1 << CS22) | (1 << CS20);
   k = 0;
-  while (k <= 10);
+  while (k <= 10)
+    ;
   TCCR2B = 0;
 }
 void init()

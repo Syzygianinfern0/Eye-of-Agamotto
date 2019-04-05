@@ -5,10 +5,12 @@
             "includePath": [
                 "/opt/arduino-1.8.8/tools/**",
                 "/opt/arduino-1.8.8/hardware/tools/avr/avr/include/**",
-                "/opt/arduino-1.8.8/hardware/arduino/avr/**"
+                "/opt/arduino-1.8.8/hardware/arduino/avr/**",
+                "/opt/arduino-1.8.8/hardware/arduino/avr/cores/arduino"
             ],
             "forcedInclude": [
-                "/opt/arduino-1.8.8/hardware/arduino/avr/cores/arduino/Arduino.h"
+                "/opt/arduino-1.8.8/hardware/arduino/avr/cores/arduino/Arduino.h",
+                "/opt/arduino-1.8.8/hardware/tools/avr/avr/include/avr/iom328p.h"
             ],
             "intelliSenseMode": "gcc-x64",
             "compilerPath": "/usr/bin/gcc",

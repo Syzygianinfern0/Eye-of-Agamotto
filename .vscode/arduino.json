@@ -1,6 +1,6 @@
 {
     "board": "arduino:avr:uno",
-    "port": "/dev/ttyUSB0",
+    "port": "/dev/ttyACM0",
     "programmer": "AVR ISP",
-    "sketch": "bttest.ino"
+    "sketch": "Bonus/cre8_task1_bonus1.ino"
 }

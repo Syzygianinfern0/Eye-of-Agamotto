@@ -1,0 +1,6 @@
+{
+    "board": "arduino:avr:uno",
+    "port": "/dev/ttyACM0",
+    "programmer": "AVR ISP",
+    "sketch": "cre8_task1_bonus1/cre8_task1_bonus1.ino"
+}

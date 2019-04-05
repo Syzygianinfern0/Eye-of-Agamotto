@@ -126,8 +126,8 @@ void show_snake(int temp)
             int temp1 = Col[k];
             c = colum_data(temp1);
             int temp2 = Row[k];
-            r = 0xff - row_data(temp2);`
-            for (int i = 0; i < 8; i++)
+            r = 0xff - row_data(temp2);
+            ` for (int i = 0; i < 8; i++)
             {
                 int ds = (c & 0x01);
                 digitalWrite(ds_col, ds);
