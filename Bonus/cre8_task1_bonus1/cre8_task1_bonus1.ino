@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 volatile int k0 = 0, flag = 0, k2 = 0;
 char direction = 'i', prev_direction = 'r', game_status = 'r';
-int h[2] = {2, 2},food[2] = {4, 4};
+int h[2] = {2, 2}, food[2] = {4, 4};
 int counter = 0;
 uint8_t pos[6][6] = {0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
@@ -10,7 +10,7 @@ uint8_t pos[6][6] = {0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
                      1, 1, 0, 0, 0, 0};
-                  // | - origin  
+// | - origin
 ISR(TIMER2_OVF_vect)
 {
   ++k2;
@@ -37,6 +37,16 @@ void dlay()
     ;
   TCCR0B = 0;
 }
+
+void dlay_long()
+{
+  TCCR2B = (1 << CS22) | (1 << CS20) | (1<<CS20);
+  k2 = 0;
+  while (k2 <= 70)
+    ;
+  TCCR2B = 0;
+}
+
 
 void init()
 {
@@ -85,7 +95,7 @@ void disp()
       }
       //usart_write((String)pos[i][j]);
     }
-  //usart_write("\n");
+    //usart_write("\n");
   }
 }
 void disp_xy()
@@ -96,7 +106,7 @@ void disp_xy()
   k2 = 0;
   TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
   k2 = 0;
-  while(k2<=120)
+  while (k2 <= 120)
   {
     for (int i = 0; i < 6; i++)
     {
@@ -118,16 +128,16 @@ void disp_xy()
     }
 
     pos[food[0]][food[1]] = 1;
-    disp();  
+    disp();
   }
-  TCCR2B = 0;  
+  TCCR2B = 0;
 }
 void ran()
 {
-  while(food[0]==h[0] && food[1]==h[1] )
-  {  
-    food[0] = random(0,6);
-    food[1] = random(0,6);
+  while (food[0] == h[0] && food[1] == h[1])
+  {
+    food[0] = random(0, 6);
+    food[1] = random(0, 6);
   }
 }
 int main()
@@ -162,13 +172,10 @@ int main()
     // usart_write((String)h[1]);
     // usart_write("  direction : ");
     // usart_write((String)direction);
-    // usart_write("\n");  
+    // usart_write("\n");
     // _delay_ms(3000);
-   
+
     x = y = z = 0;
-    while (game_status != 'r')
-    {
-    }
     x = ADC_Read(0);
     y = ADC_Read(1);
     z = ADC_Read(2);
@@ -178,28 +185,28 @@ int main()
     usart_write((String)y);
     usart_write("\tz= ");
     usart_write((String)z);
-    
-    if (x>=260 && x<=285 && y<=385 && y>=315 && z<=385 && z>=315)
+
+    if (x >= 260 && x <= 285 && y <= 385 && y >= 315 && z <= 385 && z >= 315)
     { // 270, 400, 350
       usart_write("IDLE");
       direction = 'i';
     }
-    else if (x>=285 && x<=345 && y<=420 && y>=380 && z<=385 && z>=315)
+    else if (x >= 285 && x <= 345 && y <= 420 && y >= 380 && z <= 385 && z >= 315)
     { // 330, 445, 400
-    usart_write("UP");
+      usart_write("UP");
       direction = 'u';
     }
-    else if (x<=315 && x>=270 && y<=330 && y>=290 && z<=385 && z>=315)
-    { 
+    else if (x <= 315 && x >= 270 && y <= 330 && y >= 290 && z <= 385 && z >= 315)
+    {
       usart_write("DOWN");
       direction = 'd';
     }
-    else if (x<=330 && x>=295 && y<=365 && y>=335 && z>=290 && z<=315) // 360, 400, 340
+    else if (x <= 330 && x >= 295 && y <= 365 && y >= 335 && z >= 290 && z <= 315) // 360, 400, 340
     {
       usart_write("LEFT");
       direction = 'l';
     }
-    else if (x<=300 && x>=270 && y<=370 && y>=340 && z<=415 && z>=375) // 330, 380, 450
+    else if (x <= 300 && x >= 270 && y <= 370 && y >= 340 && z <= 415 && z >= 375) // 330, 380, 450
     {
       usart_write("RIGHT");
       direction = 'r';
@@ -209,7 +216,7 @@ int main()
       usart_write("IDLE");
       direction = 'i';
     }
-    
+
     // if(counter == 2){
     //   direction = 'u';
     // }
@@ -233,12 +240,25 @@ int main()
       default:
         break;
       }
-    // disp_xy();
+      // disp_xy();
     }
 
-    if(direction != 'i')
+    if (direction != 'i')
     {
       prev_direction = direction;
-    }  
+    }
+  }
+  while (game_status != 'r')
+  { 
+    usart_write("Game over");
+    // for (int i = 0; i < 6; ++i)
+    //   for (int j = 0; j < 6; ++j)
+    //     pos[i][j] = 1;
+    // disp();
+    PORTB = 0;
+    PORTD = 0xFF;
+    dlay_long();
+    PORTD = 0;
+    dlay_long();
   }
 }
