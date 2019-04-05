@@ -2,7 +2,7 @@
 #include <avr/interrupt.h>
 volatile int k0 = 0, flag = 0, k2 = 0;
 char direction = 'i', prev_direction = 'r', game_status = 'r';
-int h[2] = {2, 2},food;
+int h[2] = {2, 2},food[2] = {4, 4};
 int counter = 0;
 uint8_t pos[6][6] = {0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
@@ -76,12 +76,11 @@ void disp()
     {
       if (pos[i][j] == 1)
       {
+        PORTD = 0;
+        PORTB = 0xFF;
         PORTD = 1 << (j + 2);
         PORTB = 0xFF ^ (1 << i);
         dlay();
-        PORTD = 0;
-        PORTB = 0xFF;
-        // dlay();
       }
       //usart_write((String)pos[i][j]);
     }
@@ -94,7 +93,16 @@ void disp_xy()
   // pos[0][h[0]] = 1;
   // pos[1][h[1]] = 1;
   pos[h[0]][h[1]] = 1;
+  pos[food[0]][food[1]] = 1;
   disp();
+}
+void ran()
+{
+  while(food[0]==h[0] && food[1]==h[1] )
+  {  
+    food[0] = random(0,6);
+    food[1] = random(0,6);
+  }
 }
 int main()
 {
@@ -104,6 +112,7 @@ int main()
   int x, y, z;
   while (1)
   {
+    ran();
     for (int i = 0; i < 6; i++)
     {
       for (int j = 0; j < 6; j++)
@@ -120,6 +129,7 @@ int main()
     }
 
     disp_xy();
+
     usart_write((String)counter);
     // usart_write("Head : ");
     // usart_write((String)h[0]);
