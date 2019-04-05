@@ -33,10 +33,11 @@ void dlay()
 {
   TCCR0B = (1 << CS02) | (1 << CS00);
   k0 = 0;
-  while (k0 <= 10)
+  while (k0 <= 2)
     ;
   TCCR0B = 0;
 }
+
 void init()
 {
   DDRD = 0b11111100;
@@ -92,9 +93,10 @@ void disp_xy()
 
   // pos[0][h[0]] = 1;
   // pos[1][h[1]] = 1;
-  k0 = 0;
-
-  while(k0<=120)
+  k2 = 0;
+  TCCR2B = (1 << CS22) | (1 << CS21) | (1 << CS20);
+  k2 = 0;
+  while(k2<=120)
   {
     for (int i = 0; i < 6; i++)
     {
@@ -103,8 +105,10 @@ void disp_xy()
         pos[i][j] = 0;
       }
     }
+
     pos[h[0]][h[1]] = 1;
     disp();
+
     for (int i = 0; i < 6; i++)
     {
       for (int j = 0; j < 6; j++)
@@ -112,10 +116,11 @@ void disp_xy()
         pos[i][j] = 0;
       }
     }
+
     pos[food[0]][food[1]] = 1;
     disp();  
   }
-  
+  TCCR2B = 0;  
 }
 void ran()
 {
