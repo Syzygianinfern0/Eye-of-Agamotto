@@ -2,7 +2,8 @@
 #include <avr/interrupt.h>
 volatile int k0 = 0, flag = 0, k2 = 0;
 char direction = 'i', prev_direction = 'r', game_status = 'r';
-int h[2] = {2, 2};
+int h[2] = {2, 2},food;
+int counter = 0;
 uint8_t pos[6][6] = {0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
                      0, 0, 0, 0, 0, 0,
@@ -38,7 +39,6 @@ void dlay()
 }
 void init()
 {
-  Serial.begin(9600);
   DDRD = 0b11111100;
   DDRB = 0xFF;
   PORTB = 0xFF;
@@ -69,7 +69,7 @@ uint16_t ADC_Read(unsigned char channel)
 }
 void disp()
 {
-  usart_write("\n");
+  //usart_write("\n");
   for (int i = 5; i >= 0; --i)
   {
     for (int j = 0; j < 6; j++)
@@ -83,9 +83,9 @@ void disp()
         PORTB = 0xFF;
         // dlay();
       }
-      usart_write((String)pos[i][j]);
+      //usart_write((String)pos[i][j]);
     }
-  usart_write("\n");
+  //usart_write("\n");
   }
 }
 void disp_xy()
@@ -98,6 +98,7 @@ void disp_xy()
 }
 int main()
 {
+  counter++;
   init();
   sei();
   int x, y, z;
@@ -119,13 +120,14 @@ int main()
     }
 
     disp_xy();
+    usart_write((String)counter);
     // usart_write("Head : ");
     // usart_write((String)h[0]);
     // usart_write((String)h[1]);
     // usart_write("  direction : ");
     // usart_write((String)direction);
     // usart_write("\n");  
-    _delay_ms(1000);
+    _delay_ms(3000);
    
     x = y = z = 0;
     while (game_status != 'r')
@@ -134,38 +136,48 @@ int main()
     x = ADC_Read(0);
     y = ADC_Read(1);
     z = ADC_Read(2);
-    // usart_write("\nx= ");
-    // usart_write((String)x);
-    // usart_write("\ty= ");
-    // usart_write((String)y);
-    // usart_write("\tz= ");
-    // usart_write((String)z);
-    //dlay();
-    if (x >= 260 && x <= 285 && y <= 385 && y >= 315 && z <= 385 && z >= 315)
+    usart_write("\nx= ");
+    usart_write((String)x);
+    usart_write("\ty= ");
+    usart_write((String)y);
+    usart_write("\tz= ");
+    usart_write((String)z);
+    
+    if (x>=260 && x<=285 && y<=385 && y>=315 && z<=385 && z>=315)
     { // 270, 400, 350
+      usart_write("IDLE");
       direction = 'i';
     }
-    else if (x >= 285 && x <= 345 && y <= 420 && y >= 380 && z <= 385 && z >= 315)
+    else if (x>=285 && x<=345 && y<=420 && y>=380 && z<=385 && z>=315)
     { // 330, 445, 400
+    usart_write("UP");
       direction = 'u';
     }
-    else if (x <= 315 && x >= 280 && y <= 330 && y >= 290 && z <= 385 && z >= 315)
-    { // 340, 340, 400
+    else if (x<=315 && x>=270 && y<=330 && y>=290 && z<=385 && z>=315)
+    { 
+      usart_write("DOWN");
       direction = 'd';
     }
-    else if (x <= 330 && x >= 300 && y <= 365 && y >= 335 && z >= 290 && z <= 315) // 360, 400, 340
+    else if (x<=330 && x>=295 && y<=365 && y>=335 && z>=290 && z<=315) // 360, 400, 340
     {
+      usart_write("LEFT");
       direction = 'l';
     }
-    else if (x <= 310 && x >= 280 && y <= 370 && y >= 345 && z <= 425 && z >= 395) // 330, 380, 450
+    else if (x<=300 && x>=270 && y<=370 && y>=340 && z<=415 && z>=375) // 330, 380, 450
     {
+      usart_write("RIGHT");
       direction = 'r';
     }
     else
     {
+      usart_write("IDLE");
       direction = 'i';
     }
     
+    // if(counter == 2){
+    //   direction = 'u';
+    // }
+
     if (direction == 'i')
     {
       switch (prev_direction)
